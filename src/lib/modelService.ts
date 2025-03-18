@@ -1,4 +1,3 @@
-
 import { CricketDecision, DecisionResult } from '@/types';
 import { toast } from '@/components/ui/use-toast';
 
@@ -15,8 +14,10 @@ export const analyzeVideo = async (
     formData.append('video', videoFile);
     
     // Simulate progress while waiting for the Python backend to process
+    let currentProgress = 0;
     const progressInterval = setInterval(() => {
-      onProgress(Math.min(95, Math.floor(Math.random() * 10) + onProgress));
+      currentProgress = Math.min(95, currentProgress + Math.floor(Math.random() * 10));
+      onProgress(currentProgress);
     }, 500);
     
     // Send to our Python backend (replace with actual backend URL when deployed)
