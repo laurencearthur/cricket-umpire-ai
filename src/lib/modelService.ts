@@ -36,7 +36,7 @@ export const analyzeVideo = async (
   };
 };
 
-// Sample videos for testing
+// Sample videos for testing - Fixed the category type to match CricketDecision
 export const getSampleVideos = () => {
   return [
     {
@@ -44,7 +44,7 @@ export const getSampleVideos = () => {
       title: 'No Ball Example',
       thumbnailUrl: 'https://images.unsplash.com/photo-1531415074968-036ba1b575da?q=80&w=500&auto=format&fit=crop',
       videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-cricket-match-in-the-stadium-4698-large.mp4',
-      category: 'no-ball',
+      category: 'no-ball' as CricketDecision,
       description: 'A clear example of a no-ball delivery'
     },
     {
@@ -52,7 +52,7 @@ export const getSampleVideos = () => {
       title: 'Run Out Decision',
       thumbnailUrl: 'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=500&auto=format&fit=crop',
       videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-man-playing-cricket-4700-large.mp4',
-      category: 'run-out',
+      category: 'run-out' as CricketDecision,
       description: 'Close run out decision requiring third umpire review'
     },
     {
@@ -60,7 +60,7 @@ export const getSampleVideos = () => {
       title: 'Wide Ball Example',
       thumbnailUrl: 'https://images.unsplash.com/photo-1595900859673-98bfc0427干a01?q=80&w=500&auto=format&fit=crop',
       videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-coverage-of-a-cricket-match-4701-large.mp4',
-      category: 'wide-ball',
+      category: 'wide-ball' as CricketDecision,
       description: 'Clear wide ball delivery'
     },
     {
@@ -68,7 +68,7 @@ export const getSampleVideos = () => {
       title: 'LBW Decision',
       thumbnailUrl: 'https://images.unsplash.com/photo-1590156534694-8194fb50d2c8?q=80&w=500&auto=format&fit=crop',
       videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-cricket-players-in-a-field-4699-large.mp4',
-      category: 'lbw',
+      category: 'lbw' as CricketDecision,
       description: 'LBW appeal requiring detailed review'
     },
   ];
