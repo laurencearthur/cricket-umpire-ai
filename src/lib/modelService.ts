@@ -1,27 +1,60 @@
 
 import { CricketDecision, DecisionResult } from '@/types';
+import { toast } from '@/components/ui/use-toast';
 
-// This is a placeholder for the actual ML model integration
-// In a real implementation, this would use TensorFlow.js or a similar library
-// to load and run a CNN model for cricket video analysis
-
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-// Improved model processing that attempts to detect the video type
+// Updated to use a Python backend service for analysis
 export const analyzeVideo = async (
   videoFile: File,
   onProgress: (progress: number) => void
 ): Promise<DecisionResult> => {
-  console.log('Analyzing video:', videoFile.name);
+  console.log('Sending video for Python analysis:', videoFile.name);
   
-  // Simulate processing steps
-  for (let i = 0; i <= 100; i += 10) {
-    await delay(300);
-    onProgress(i);
+  try {
+    // Create form data to send the file
+    const formData = new FormData();
+    formData.append('video', videoFile);
+    
+    // Simulate progress while waiting for the Python backend to process
+    const progressInterval = setInterval(() => {
+      onProgress(Math.min(95, Math.floor(Math.random() * 10) + onProgress));
+    }, 500);
+    
+    // Send to our Python backend (replace with actual backend URL when deployed)
+    // For local development, this would be something like http://localhost:5000/analyze
+    const backendUrl = 'http://localhost:5000/analyze';
+    
+    const response = await fetch(backendUrl, {
+      method: 'POST',
+      body: formData,
+    });
+    
+    // Clear the progress interval
+    clearInterval(progressInterval);
+    onProgress(100);
+    
+    if (!response.ok) {
+      throw new Error(`Server responded with ${response.status}`);
+    }
+    
+    // Parse the response from the Python backend
+    const result = await response.json();
+    
+    return {
+      decision: result.decision,
+      confidence: result.confidence,
+      timestamp: Date.now()
+    };
+  } catch (error) {
+    console.error('Error during Python analysis:', error);
+    
+    // Fallback to the previous detection method if the Python service is unavailable
+    console.log('Falling back to filename-based analysis');
+    return fallbackAnalysis(videoFile);
   }
-  
-  // Instead of random results, try to determine based on filename patterns
-  // In a real app, this would be actual CNN analysis
+};
+
+// Fallback analysis based on filename patterns (from the previous implementation)
+const fallbackAnalysis = (videoFile: File): DecisionResult => {
   let decision: CricketDecision = 'legal-ball'; // Default
   const fileName = videoFile.name.toLowerCase();
   
@@ -36,10 +69,7 @@ export const analyzeVideo = async (
   }
   
   // For demo purposes, if we can't determine from name, use the file size as a heuristic
-  // This ensures consistent results for the same file
   if (decision === 'legal-ball') {
-    // Use the file size to deterministically select a decision
-    // This ensures the same file always gets the same result
     const fileSize = videoFile.size;
     const decisions: CricketDecision[] = ['no-ball', 'run-out', 'wide-ball', 'lbw', 'legal-ball'];
     const index = fileSize % decisions.length;
